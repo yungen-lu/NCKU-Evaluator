@@ -27,7 +27,7 @@ const setLocalStorage = async (key, value) => {
   });
 };
 
-const updateData = async () => {
+const updateData = async (item) => {
   return new Promise(async (resolve, reject) => {
     let data = await get_data(
       `https://ncchen.ga/ncku-evaluation/data/${item}-sha256.txt`,
@@ -61,11 +61,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.method == "get_data") {
     let array_of_promise = []
     for (item of resource_list) {
-      let promise = updateData()
+      let promise = updateData(item)
       array_of_promise.push(promise)
     }
     Promise.all(array_of_promise).then(()=>{
-      sendResponse({complete: "ok"})
+      sendResponse({complete: "ok", json_data:json_data })
     })
   } else {
     sendResponse({});

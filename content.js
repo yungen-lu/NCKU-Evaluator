@@ -204,12 +204,16 @@ if (
     </div>
   </div>`
   );
-  chrome.runtime.sendMessage({ method: "get_data" }, function (response) {
+  chrome.runtime.sendMessage({ method: "get_data" }, function(response) {
+    console.log(response)
     if (response.complete == "ok") {
-      console.log("🙉");
-      console.log("👌");
+        window.json_data = response.json_data;
+        window.profs_items = window.json_data["urschool"]["column names"];
+        modify_html();
+        $(".loading-btn").remove();
     } else {
       console.log("📛");
     }
+  return true;
   });
 }
